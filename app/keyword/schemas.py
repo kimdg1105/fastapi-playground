@@ -14,7 +14,7 @@ class Keyword(KeywordBase):
     id: str
     keywordName: str
     createdDateTime: str
-    lastModifiedDateTime: str
+    lastModifiedDateTime: str | None
 
     class Config:
         from_attributes = True
