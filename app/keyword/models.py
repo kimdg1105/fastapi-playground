@@ -1,15 +1,11 @@
-import uuid
 from datetime import datetime
 from enum import Enum
 
 from sqlalchemy import Column, String, Enum as SqlEnum, DateTime
+from sqlalchemy.orm import relationship
 
-from app.core.UUIDType import UUIDType
+from app.core.UUIDType import UUIDType, generate_uuid
 from app.database import Base
-
-
-def generate_uuid():
-    return str(uuid.uuid4())
 
 
 class KeywordStatus(Enum):
@@ -25,3 +21,5 @@ class Keyword(Base):
     lastModifiedDateTime = Column(DateTime, nullable=True)
     keywordName = Column(String(255))
     keywordStatus = Column(SqlEnum(KeywordStatus), default=KeywordStatus.ACTIVE, nullable=False)
+
+    news = relationship("News", back_populates="keyword")

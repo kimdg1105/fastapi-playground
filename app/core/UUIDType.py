@@ -3,6 +3,10 @@ import uuid
 from sqlalchemy import TypeDecorator, BINARY
 
 
+def generate_uuid():
+    return str(uuid.uuid4())
+
+
 class UUIDType(TypeDecorator):
     impl = BINARY(16)
 
