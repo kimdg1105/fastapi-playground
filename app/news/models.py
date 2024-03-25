@@ -4,8 +4,8 @@ from enum import Enum
 from sqlalchemy import Column, DateTime, Enum as SqlEnum, String, Text, ForeignKey
 from sqlalchemy.orm import relationship
 
-from app.core.UUIDType import generate_uuid, UUIDType
 from app.database import Base
+from core.UUIDType import generate_uuid, UUIDType
 
 
 class NewSourceType(Enum):

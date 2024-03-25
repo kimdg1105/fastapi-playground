@@ -1,33 +1,27 @@
 from datetime import datetime
-from typing import Type
 
-from sqlalchemy.orm import Session
-
-from . import models, schemas
+from core.db.transactional import Transactional
+from . import models
 from .models import Keyword
+from .persistence import KeywordSQLAlchemyRepository
+from .schemas import KeywordCreate
 
 
-def get_keyword(db: Session, keyword_id: str) -> Type[Keyword]:
-    return (db.query(models.Keyword)
-            .where(models.Keyword.id == keyword_id)
-            .first())
+class KeywordService:
+    def __init__(self, *, repository: KeywordSQLAlchemyRepository):
+        self.repository = repository
 
+    async def get_keyword(self, *, keyword_id: str) -> Keyword:
+        return await self.repository.get_keyword_by_id(keyword_id=keyword_id)
 
-def get_keyword_by_keyword_name(db: Session, keyword_name: str) -> Type[Keyword]:
-    return (db.query(models.Keyword)
-            .where(models.Keyword.keywordName == keyword_name)
-            .first())
+    async def get_keyword_by_keyword_name(self, *, keyword_name: str) -> Keyword:
+        return await self.repository.get_keyword_by_keyword_name(keyword_name=keyword_name)
 
+    async def get_all_keywords(self) -> list[Keyword]:
+        return await self.repository.get_all()
 
-def get_all(db: Session) -> list[Type[Keyword]]:
-    return db.query(models.Keyword).all()
-
-
-def create_keyword(db: Session, keyword: schemas.KeywordCreate) -> Keyword:
-    db_keyword = models.Keyword(**keyword.model_dump())
-    db_keyword.createdDateTime = datetime.now()
-
-    db.add(db_keyword)
-    db.commit()
-    db.refresh(db_keyword)
-    return db_keyword
+    @Transactional()
+    async def create_keyword(self, *, keywordCreate: KeywordCreate) -> None:
+        db_keyword = models.Keyword(**keywordCreate.model_dump())
+        db_keyword.createdDateTime = datetime.now()
+        await self.repository.save(keyword=db_keyword)

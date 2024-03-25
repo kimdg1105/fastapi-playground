@@ -4,8 +4,8 @@ from enum import Enum
 from sqlalchemy import Column, String, Enum as SqlEnum, DateTime
 from sqlalchemy.orm import relationship
 
-from app.core.UUIDType import UUIDType, generate_uuid
 from app.database import Base
+from core.UUIDType import UUIDType, generate_uuid
 
 
 class KeywordStatus(Enum):
