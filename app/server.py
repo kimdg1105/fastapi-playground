@@ -4,7 +4,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
 
 from app.container import Container
-from app.keyword.router import router as keyword_router
+from app.keyword.router import keyword_router
 from core.config import config
 from core.exceptions import CustomException
 from core.fastapi.dependencies import Logging
